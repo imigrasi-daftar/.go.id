@@ -1,4 +1,6 @@
-
+<!DOCTYPE html>
+<html lang="id">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Viewer - Imigrasi</title>
@@ -10,14 +12,12 @@
             height: 100%;
             overflow: hidden; /* Mencegah scroll bar pada halaman utama */
         }
-
         /* Membuat iframe memenuhi seluruh layar */
         iframe {
             border: none; /* Menghilangkan border default iframe */
             width: 100%;
             height: 100%;
         }
-
         /* Styling untuk tombol live chat kustom, gaya diinspirasi dari imigrasi.go.id */
         #custom-chat-button {
             position: fixed;
@@ -39,12 +39,10 @@
             font-weight: bold;
             transition: all 0.2s ease-in-out;
         }
-
         #custom-chat-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.35);
         }
-
         .icon-container {
             width: 50px;
             height: 50px;
@@ -56,33 +54,97 @@
             margin-left: 15px; /* Memberi jarak dari teks */
             flex-shrink: 0; /* Mencegah ikon menyusut */
         }
-
         .icon-container img {
             width: 40px; /* Sedikit lebih kecil dari containernya */
             height: auto;
         }
-
         .chat-text {
             white-space: nowrap; /* Mencegah teks turun baris */
+        }
+        #error-message {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
-
     <!-- Iframe untuk menampilkan website target -->
-    <iframe src="https://imigrasi.go.id/" title="Website Imigrasi"></iframe>
-
+    <iframe 
+        src="https://imigrasi.go.id/" 
+        title="Website Imigrasi"
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+        onload="hideError()"
+        onerror="showError('Gagal memuat website imigrasi')">
+    </iframe>
+    
     <!-- Tombol live chat kustom -->
-    <!-- Saat diklik, tombol ini akan menjalankan fungsi jivo_api.open() untuk membuka chat -->
-    <div id="custom-chat-button" onclick="jivo_api.open()">
+    <!-- Saat diklik, tombol ini akan menjalankan fungsi openChat() untuk membuka chat -->
+    <div id="custom-chat-button" onclick="openChat()">
         <span class="chat-text">Tanya Mido Yuk!</span>
         <div class="icon-container">
-            <img src="https://botmaster-files.s3.ap-southeast-1.amazonaws.com/Content/6a6155f4ccd5b8933bc1a53de8d280720ee5781f/logo%20livechat.png" alt="Live Chat">
+            <img src="https://botmaster-files.s3.ap-southeast-1.amazonaws.com/Content/6a6155f4ccd5b8933bc1a53de8d280720ee5781f/logo%20livechat.png" alt="Live Chat" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzM0M2E0MCI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bTAgMThjLTQuNDEgMC04LTMuNTktOC04czMuNTktOCA4LTggOCAzLjU5IDggOC0zLjU5IDgtOCA4em0wLTE0Yy0yLjIxIDAtNCAxLjc5LTQgNCAwIC44OS4yOSAxLjcxLjc4IDIuMzhMMTAgMTVsLjM4LTEuNTVjLjU5LjM1IDEuMjcuNTUgMS45OS41NSAyLjIxIDAgNC0xLjc5IDQtNCAwLTIuMjEtMS43OS00LTQtNHptMiA1aC00VjdoNHY0eiIvPjwvc3ZnPg==';">
         </div>
     </div>
-
+    
+    <!-- Pesan error -->
+    <div id="error-message"></div>
+    
     <!-- Script untuk widget JivoSite Live Chat -->
-    <script src="//code.jivosite.com/widget/6mvXgLQfwY" async></script>
-
+    <script>
+        // Fungsi untuk menampilkan pesan error
+        function showError(message) {
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            // Sembunyikan pesan setelah 5 detik
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Fungsi untuk menyembunyikan pesan error
+        function hideError() {
+            document.getElementById('error-message').style.display = 'none';
+        }
+        
+        // Fungsi untuk membuka chat dengan pengecekan error
+        function openChat() {
+            try {
+                // Cek apakah jivo_api sudah tersedia
+                if (typeof jivo_api !== 'undefined') {
+                    jivo_api.open();
+                } else {
+                    showError('Widget chat belum siap. Silakan coba beberapa saat lagi.');
+                    console.error('jivo_api is not defined');
+                }
+            } catch (error) {
+                showError('Terjadi kesalahan saat membuka chat: ' + error.message);
+                console.error('Error opening chat:', error);
+            }
+        }
+        
+        // Menambahkan event listener untuk memastikan script JivoSite dimuat dengan benar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Membuat script untuk JivoSite secara dinamis
+            const jivoScript = document.createElement('script');
+            jivoScript.src = '//code.jivosite.com/widget/6mvXgLQfwY';
+            jivoScript.async = true;
+            jivoScript.onerror = function() {
+                showError('Gagal memuat widget chat. Periksa koneksi internet Anda.');
+                console.error('Failed to load JivoSite widget');
+            };
+            document.head.appendChild(jivoScript);
+        });
+    </script>
 </body>
 </html>
