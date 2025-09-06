@@ -11,6 +11,7 @@
             --primary-color: #0052a4;
             --secondary-color: #f0f0f0;
             --accent-color: #e63946;
+            --success-color: #28a745;
             --text-color: #333;
             --light-bg: #f8f9fa;
         }
@@ -101,6 +102,25 @@
             transform: none;
         }
         
+        .btn-success-custom {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-success-custom:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
         .loading-spinner {
             display: none;
             width: 20px;
@@ -118,6 +138,11 @@
         
         .modal-header {
             background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .modal-header-success {
+            background-color: var(--success-color);
             color: white;
         }
         
@@ -219,6 +244,105 @@
             display: none;
         }
         
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success-color);
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .next-steps {
+            margin-top: 20px;
+        }
+        
+        .next-steps h5 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .step-item {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex-grow: 1;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .step-description {
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        /* Success Status Container */
+        .success-status-container {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .success-status-icon {
+            font-size: 5rem;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+        
+        .success-status-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--success-color);
+            margin-bottom: 15px;
+        }
+        
+        .success-status-message {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        .success-status-details {
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .refresh-timer {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 20px;
+        }
+        
+        .refresh-timer i {
+            margin-right: 10px;
+        }
+        
         @media (max-width: 768px) {
             .main-container {
                 padding: 20px;
@@ -228,7 +352,7 @@
                 font-size: 1.5rem;
             }
             
-            .btn-custom {
+            .btn-custom, .btn-success-custom {
                 width: 100%;
                 padding: 15px;
             }
@@ -256,7 +380,51 @@
             </div>
         </div>
         
-        <div class="main-container">
+        <!-- Success Status Container (Hidden by default) -->
+        <div class="success-status-container" id="successStatusContainer">
+            <div class="success-status-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="success-status-title">Pembayaran Berhasil!</h2>
+            <p class="success-status-message">
+                Terima kasih telah melakukan pembayaran untuk penghapusan daftar hitam. 
+                Proses penghapusan daftar hitam Anda sedang diproses dan akan selesai dalam 1x24 jam.
+            </p>
+            
+            <div class="success-status-details">
+                <h5>Detail Pembayaran:</h5>
+                <div class="info-row">
+                    <span class="info-label">Nama:</span>
+                    <span class="info-value">TEKIN ISA</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nomor Passport:</span>
+                    <span class="info-value">C7GMGVYMT</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nominal Pembayaran:</span>
+                    <span class="info-value">Rp 1.503.500</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status:</span>
+                    <span class="info-value" style="color: var(--success-color);">Pembayaran Berhasil</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Waktu Pembayaran:</span>
+                    <span class="info-value" id="paymentTime">-</span>
+                </div>
+            </div>
+            
+            <div class="refresh-timer">
+                <i class="fas fa-sync-alt"></i> Halaman akan diperbarui dalam <span id="refreshCountdown">10</span> detik
+            </div>
+            
+            <button class="btn btn-success-custom mt-3" id="viewNextStepsBtn">
+                <i class="fas fa-list-ol"></i> Lihat Langkah Selanjutnya
+            </button>
+        </div>
+        
+        <div class="main-container" id="mainContainer">
             <div class="alert-custom">
                 <i class="fas fa-exclamation-triangle"></i>
                 <div>
@@ -349,9 +517,83 @@
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle"></i> Silakan lakukan pembayaran sebelum waktu habis. Setelah pembayaran berhasil, daftar hitam Anda akan dihapus dalam 1x24 jam.
                     </div>
+                    
+                    <div class="text-center mt-4">
+                        <button id="confirmPaymentBtn" class="btn btn-success-custom">
+                            <i class="fas fa-check-circle"></i> Konfirmasi Pembayaran
+                        </button>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header modal-header-success">
+                    <h5 class="modal-title" id="successModalLabel">Pembayaran Berhasil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    
+                    <div class="text-center">
+                        <h4>Pembayaran Anda Berhasil!</h4>
+                        <p>Terima kasih telah melakukan pembayaran untuk penghapusan daftar hitam. Proses penghapusan daftar hitam Anda sedang diproses dan akan selesai dalam 1x24 jam.</p>
+                    </div>
+                    
+                    <div class="next-steps">
+                        <h5>Langkah Selanjutnya:</h5>
+                        
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Tunggu Konfirmasi</div>
+                                <div class="step-description">Sistem akan memproses penghapusan daftar hitam Anda dalam waktu 1x24 jam. Anda akan menerima email konfirmasi setelah proses selesai.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Cek Status Penghapusan</div>
+                                <div class="step-description">Setelah menerima email konfirmasi, Anda dapat melakukan pengecekan status penghapusan daftar hitam melalui website resmi Imigrasi Indonesia.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Persiapkan Dokumen Perjalanan</div>
+                                <div class="step-description">Pastikan dokumen perjalanan Anda (paspor, visa, dll) sudah lengkap dan valid sebelum melakukan perjalanan ke Indonesia.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <div class="step-title">Nikmati Perjalanan Anda</div>
+                                <div class="step-description">Setelah semua proses selesai, Anda dapat melakukan perjalanan ke Indonesia tanpa kendala terkait daftar hitam sebelumnya.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success mt-4">
+                        <i class="fas fa-info-circle"></i> <strong>Catatan:</strong> Simpan bukti pembayaran ini sebagai referensi jika diperlukan di kemudian hari.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-success-custom" id="downloadReceiptBtn">
+                        <i class="fas fa-download"></i> Unduh Bukti Pembayaran
+                    </button>
                 </div>
             </div>
         </div>
@@ -364,13 +606,34 @@
             const loadingSpinner = paymentBtn.querySelector('.loading-spinner');
             const btnText = paymentBtn.querySelector('.btn-text');
             const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
             const copyBtn = document.getElementById('copyBtn');
+            const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+            const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
+            const viewNextStepsBtn = document.getElementById('viewNextStepsBtn');
             const countdownElement = document.getElementById('countdown');
             const expiredNotice = document.getElementById('expiredNotice');
+            const mainContainer = document.getElementById('mainContainer');
+            const successStatusContainer = document.getElementById('successStatusContainer');
+            const paymentTimeElement = document.getElementById('paymentTime');
+            const refreshCountdownElement = document.getElementById('refreshCountdown');
+            
+            // Check if payment is already successful
+            const paymentSuccess = localStorage.getItem('paymentSuccess');
+            const paymentTime = localStorage.getItem('paymentTime');
+            
+            if (paymentSuccess === 'true') {
+                showSuccessStatus();
+                if (paymentTime) {
+                    paymentTimeElement.textContent = paymentTime;
+                }
+                startRefreshCountdown();
+            }
             
             // Check if countdown is already running
             const savedStartTime = localStorage.getItem('paymentStartTime');
             let countdownInterval;
+            let refreshCountdownInterval;
             
             // Payment button click handler
             paymentBtn.addEventListener('click', function() {
@@ -398,6 +661,77 @@
                 }, 2000);
             });
             
+            // Confirm payment button click handler
+            confirmPaymentBtn.addEventListener('click', function() {
+                // Show loading spinner
+                confirmPaymentBtn.disabled = true;
+                confirmPaymentBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Memproses...';
+                
+                // Simulate payment processing
+                setTimeout(function() {
+                    // Close payment modal
+                    paymentModal.hide();
+                    
+                    // Clear countdown
+                    if (countdownInterval) {
+                        clearInterval(countdownInterval);
+                    }
+                    
+                    // Remove saved start time
+                    localStorage.removeItem('paymentStartTime');
+                    
+                    // Save payment success status
+                    const now = new Date();
+                    const paymentDateTime = now.toLocaleString('id-ID');
+                    localStorage.setItem('paymentSuccess', 'true');
+                    localStorage.setItem('paymentTime', paymentDateTime);
+                    
+                    // Reset confirm payment button
+                    confirmPaymentBtn.disabled = false;
+                    confirmPaymentBtn.innerHTML = '<i class="fas fa-check-circle"></i> Konfirmasi Pembayaran';
+                    
+                    // Show success status
+                    showSuccessStatus();
+                    paymentTimeElement.textContent = paymentDateTime;
+                    
+                    // Start refresh countdown
+                    startRefreshCountdown();
+                    
+                    // Show success modal
+                    successModal.show();
+                }, 3000);
+            });
+            
+            // View next steps button click handler
+            viewNextStepsBtn.addEventListener('click', function() {
+                successModal.show();
+            });
+            
+            // Download receipt button click handler
+            downloadReceiptBtn.addEventListener('click', function() {
+                // Simulate download
+                downloadReceiptBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mengunduh...';
+                downloadReceiptBtn.disabled = true;
+                
+                setTimeout(function() {
+                    // Reset button
+                    downloadReceiptBtn.innerHTML = '<i class="fas fa-download"></i> Unduh Bukti Pembayaran';
+                    downloadReceiptBtn.disabled = false;
+                    
+                    // Show success message
+                    const originalText = downloadReceiptBtn.innerHTML;
+                    downloadReceiptBtn.innerHTML = '<i class="fas fa-check"></i> Berhasil Diunduh';
+                    downloadReceiptBtn.classList.remove('btn-success-custom');
+                    downloadReceiptBtn.classList.add('btn-secondary');
+                    
+                    setTimeout(function() {
+                        downloadReceiptBtn.innerHTML = originalText;
+                        downloadReceiptBtn.classList.remove('btn-secondary');
+                        downloadReceiptBtn.classList.add('btn-success-custom');
+                    }, 2000);
+                }, 2000);
+            });
+            
             // Copy button click handler
             copyBtn.addEventListener('click', function() {
                 const paymentCode = '135036000032837135';
@@ -412,6 +746,41 @@
                     alert('Gagal menyalin kode. Silakan salin secara manual.');
                 });
             });
+            
+            // Show success status function
+            function showSuccessStatus() {
+                mainContainer.style.display = 'none';
+                successStatusContainer.style.display = 'block';
+            }
+            
+            // Start refresh countdown function
+            function startRefreshCountdown() {
+                let seconds = 10;
+                
+                // Clear any existing interval
+                if (refreshCountdownInterval) {
+                    clearInterval(refreshCountdownInterval);
+                }
+                
+                const updateCountdown = function() {
+                    refreshCountdownElement.textContent = seconds;
+                    
+                    if (seconds <= 0) {
+                        clearInterval(refreshCountdownInterval);
+                        // Refresh the page
+                        location.reload();
+                        return;
+                    }
+                    
+                    seconds--;
+                };
+                
+                // Update immediately
+                updateCountdown();
+                
+                // Update every second
+                refreshCountdownInterval = setInterval(updateCountdown, 1000);
+            }
             
             // Countdown timer function
             function startCountdown(startTime) {
@@ -452,7 +821,7 @@
             }
             
             // If there's a saved start time, restore the countdown
-            if (savedStartTime) {
+            if (savedStartTime && paymentSuccess !== 'true') {
                 const startTime = parseInt(savedStartTime);
                 const now = new Date().getTime();
                 const duration = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
