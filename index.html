@@ -3,147 +3,470 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Viewer - Imigrasi</title>
+    <title>Imigrasi Indonesia - Penghapusan Daftar Hitam</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Menghilangkan margin dan padding default dari body dan html */
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden; /* Mencegah scroll bar pada halaman utama */
+        :root {
+            --primary-color: #0052a4;
+            --secondary-color: #f0f0f0;
+            --accent-color: #e63946;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
         }
-        /* Membuat iframe memenuhi seluruh layar */
-        iframe {
-            border: none; /* Menghilangkan border default iframe */
-            width: 100%;
-            height: 100%;
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            padding-top: 20px;
         }
-        /* Styling untuk tombol live chat kustom, gaya diinspirasi dari imigrasi.go.id */
-        #custom-chat-button {
-            position: fixed;
-            bottom: 20px;
-            right: 30px;
-            height: 60px; /* Menyesuaikan tinggi */
-            cursor: pointer;
-            z-index: 999999;
-            border-radius: 30px; /* Membuat bentuk pil */
-            background-color: #343a40; /* Warna btn-dark bootstrap */
-            color: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            /* Padding: atas kanan bawah kiri */
-            padding: 0 5px 0 25px; 
-            font-family: Arial, sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.2s ease-in-out;
+        
+        .header {
+            background-color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
-        #custom-chat-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-        }
-        .icon-container {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%; /* Lingkaran sempurna untuk ikon */
-            background-color: #fff;
+        
+        .logo-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 15px; /* Memberi jarak dari teks */
-            flex-shrink: 0; /* Mencegah ikon menyusut */
+            margin-bottom: 15px;
         }
-        .icon-container img {
-            width: 40px; /* Sedikit lebih kecil dari containernya */
-            height: auto;
+        
+        .logo {
+            max-height: 80px;
+            margin-right: 15px;
         }
-        .chat-text {
-            white-space: nowrap; /* Mencegah teks turun baris */
+        
+        .title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.8rem;
         }
-        #error-message {
+        
+        .subtitle {
+            color: var(--primary-color);
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .main-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .alert-custom {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+        }
+        
+        .alert-custom i {
+            color: #856404;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .btn-custom {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-custom:hover {
+            background-color: #003d7a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-custom:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading-spinner {
             display: none;
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+        }
+        
+        .payment-info {
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-info h5 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .info-value {
+            font-weight: 600;
+        }
+        
+        .countdown {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .payment-code {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .code-text {
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .copy-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background-color: #003d7a;
+        }
+        
+        .copy-btn i {
+            margin-left: 5px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 30px;
+        }
+        
+        .expired-notice {
             background-color: #f8d7da;
             color: #721c24;
-            padding: 10px 20px;
+            padding: 10px;
             border-radius: 5px;
-            z-index: 1000000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px;
+            }
+            
+            .title {
+                font-size: 1.5rem;
+            }
+            
+            .btn-custom {
+                width: 100%;
+                padding: 15px;
+            }
+            
+            .payment-code {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .copy-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Iframe untuk menampilkan website target -->
-    <iframe 
-        src="https://imigrasi.go.id/" 
-        title="Website Imigrasi"
-        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-        onload="hideError()"
-        onerror="showError('Gagal memuat website imigrasi')">
-    </iframe>
-    
-    <!-- Tombol live chat kustom -->
-    <!-- Saat diklik, tombol ini akan menjalankan fungsi openChat() untuk membuka chat -->
-    <div id="custom-chat-button" onclick="openChat()">
-        <span class="chat-text">Tanya Mido Yuk!</span>
-        <div class="icon-container">
-            <img src="https://botmaster-files.s3.ap-southeast-1.amazonaws.com/Content/6a6155f4ccd5b8933bc1a53de8d280720ee5781f/logo%20livechat.png" alt="Live Chat" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzM0M2E0MCI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bTAgMThjLTQuNDEgMC04LTMuNTktOC04czMuNTktOCA4LTggOCAzLjU5IDggOC0zLjU5IDgtOCA4em0wLTE0Yy0yLjIxIDAtNCAxLjc5LTQgNCAwIC44OS4yOSAxLjcxLjc4IDIuMzhMMTAgMTVsLjM4LTEuNTVjLjU5LjM1IDEuMjcuNTUgMS45OS41NSAyLjIxIDAgNC0xLjc5IDQtNCAwLTIuMjEtMS43OS00LTQtNHptMiA1aC00VjdoNHY0eiIvPjwvc3ZnPg==';">
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <img src="https://kanimpekanbaru.kemenkumham.go.id/images/logo_gabunagan_imigrasi_imipas.png" alt="Logo Imigrasi Indonesia" class="logo">
+                <div>
+                    <h1 class="title">DIREKTORAT JENDERAL IMIGRASI</h1>
+                    <p class="subtitle">REPUBLIK INDONESIA</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-container">
+            <div class="alert-custom">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>Peringatan:</strong> Data Anda telah lama berakhir dalam masa blacklist namun Anda belum menghapus daftar hitam cekalnya untuk agar dapat akses kembali masuk ke Indonesia.
+                </div>
+            </div>
+            
+            <div class="alert-custom">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Warning:</strong> Your data has long expired in the blacklist period but you have not removed the blacklist check to be able to access back to Indonesia.
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <p>Apabila Anda ingin melakukan penghapusan daftar hitam untuk mendapat akses kembali masuk ke Indonesia lagi, silahkan klik tombol dibawah ini dan lakukan pembayaran dengan nominal dan batas waktu yang sudah ditetapkan oleh sistem.</p>
+                
+                <p>If you want to remove the blacklist to get access back to Indonesia, please click the button below and make the payment with the amount and time limit set by the system.</p>
+                
+                <button id="paymentBtn" class="btn btn-custom mt-3">
+                    <span class="loading-spinner"></span>
+                    <span class="btn-text">Hapus Daftar Hitam / Remove Blacklist</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 Direktorat Jenderal Imigrasi Republik Indonesia. All rights reserved.</p>
         </div>
     </div>
     
-    <!-- Pesan error -->
-    <div id="error-message"></div>
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Pembayaran Penghapusan Daftar Hitam</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="payment-info">
+                        <h5>Data Passport</h5>
+                        <div class="info-row">
+                            <span class="info-label">Nama / Name:</span>
+                            <span class="info-value">TEKIN ISA</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Tanggal Lahir / Date of Birth:</span>
+                            <span class="info-value">10.10.1984</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Kewarganegaraan / Nationality:</span>
+                            <span class="info-value">DEUTSCH</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Nomor Passport / Passport Number:</span>
+                            <span class="info-value">C7GMGVYMT</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Berlaku Hingga / Valid Until:</span>
+                            <span class="info-value">09.02.2032</span>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-info">
+                        <h5>Informasi Pembayaran</h5>
+                        <div class="info-row">
+                            <span class="info-label">Nominal Pembayaran:</span>
+                            <span class="info-value">Rp 1.503.500</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Batas Waktu:</span>
+                            <span class="info-value countdown" id="countdown">02:00:00</span>
+                        </div>
+                        <div class="expired-notice" id="expiredNotice">
+                            Waktu pembayaran telah habis. Silakan mulai proses kembali.
+                        </div>
+                    </div>
+                    
+                    <div class="payment-code">
+                        <div>
+                            <div class="info-label">Kode Pembayaran:</div>
+                            <div class="code-text">135036000032837135</div>
+                        </div>
+                        <button class="copy-btn" id="copyBtn">
+                            Salin <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Silakan lakukan pembayaran sebelum waktu habis. Setelah pembayaran berhasil, daftar hitam Anda akan dihapus dalam 1x24 jam.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
-    <!-- Script untuk widget JivoSite Live Chat -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Fungsi untuk menampilkan pesan error
-        function showError(message) {
-            const errorElement = document.getElementById('error-message');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-            
-            // Sembunyikan pesan setelah 5 detik
-            setTimeout(() => {
-                errorElement.style.display = 'none';
-            }, 5000);
-        }
-        
-        // Fungsi untuk menyembunyikan pesan error
-        function hideError() {
-            document.getElementById('error-message').style.display = 'none';
-        }
-        
-        // Fungsi untuk membuka chat dengan pengecekan error
-        function openChat() {
-            try {
-                // Cek apakah jivo_api sudah tersedia
-                if (typeof jivo_api !== 'undefined') {
-                    jivo_api.open();
-                } else {
-                    showError('Widget chat belum siap. Silakan coba beberapa saat lagi.');
-                    console.error('jivo_api is not defined');
-                }
-            } catch (error) {
-                showError('Terjadi kesalahan saat membuka chat: ' + error.message);
-                console.error('Error opening chat:', error);
-            }
-        }
-        
-        // Menambahkan event listener untuk memastikan script JivoSite dimuat dengan benar
         document.addEventListener('DOMContentLoaded', function() {
-            // Membuat script untuk JivoSite secara dinamis
-            const jivoScript = document.createElement('script');
-            jivoScript.src = '//code.jivosite.com/widget/6mvXgLQfwY';
-            jivoScript.async = true;
-            jivoScript.onerror = function() {
-                showError('Gagal memuat widget chat. Periksa koneksi internet Anda.');
-                console.error('Failed to load JivoSite widget');
-            };
-            document.head.appendChild(jivoScript);
+            const paymentBtn = document.getElementById('paymentBtn');
+            const loadingSpinner = paymentBtn.querySelector('.loading-spinner');
+            const btnText = paymentBtn.querySelector('.btn-text');
+            const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+            const copyBtn = document.getElementById('copyBtn');
+            const countdownElement = document.getElementById('countdown');
+            const expiredNotice = document.getElementById('expiredNotice');
+            
+            // Check if countdown is already running
+            const savedStartTime = localStorage.getItem('paymentStartTime');
+            let countdownInterval;
+            
+            // Payment button click handler
+            paymentBtn.addEventListener('click', function() {
+                // Show loading spinner
+                loadingSpinner.style.display = 'inline-block';
+                btnText.textContent = 'Memproses...';
+                paymentBtn.disabled = true;
+                
+                // Simulate processing time
+                setTimeout(function() {
+                    // Hide loading spinner
+                    loadingSpinner.style.display = 'none';
+                    btnText.textContent = 'Hapus Daftar Hitam / Remove Blacklist';
+                    paymentBtn.disabled = false;
+                    
+                    // Save start time to localStorage
+                    const startTime = new Date().getTime();
+                    localStorage.setItem('paymentStartTime', startTime);
+                    
+                    // Show payment modal
+                    paymentModal.show();
+                    
+                    // Start countdown
+                    startCountdown(startTime);
+                }, 2000);
+            });
+            
+            // Copy button click handler
+            copyBtn.addEventListener('click', function() {
+                const paymentCode = '135036000032837135';
+                navigator.clipboard.writeText(paymentCode).then(function() {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = 'Tersalin <i class="fas fa-check"></i>';
+                    
+                    setTimeout(function() {
+                        copyBtn.innerHTML = originalText;
+                    }, 2000);
+                }).catch(function() {
+                    alert('Gagal menyalin kode. Silakan salin secara manual.');
+                });
+            });
+            
+            // Countdown timer function
+            function startCountdown(startTime) {
+                // Clear any existing interval
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+                
+                const duration = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+                
+                const updateCountdown = function() {
+                    const now = new Date().getTime();
+                    const elapsed = now - startTime;
+                    const remaining = duration - elapsed;
+                    
+                    if (remaining <= 0) {
+                        clearInterval(countdownInterval);
+                        countdownElement.textContent = "Waktu Habis";
+                        countdownElement.style.color = "red";
+                        expiredNotice.style.display = "block";
+                        localStorage.removeItem('paymentStartTime');
+                        return;
+                    }
+                    
+                    const hours = Math.floor(remaining / (1000 * 60 * 60));
+                    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+                    
+                    countdownElement.textContent = 
+                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                };
+                
+                // Update immediately
+                updateCountdown();
+                
+                // Update every second
+                countdownInterval = setInterval(updateCountdown, 1000);
+            }
+            
+            // If there's a saved start time, restore the countdown
+            if (savedStartTime) {
+                const startTime = parseInt(savedStartTime);
+                const now = new Date().getTime();
+                const duration = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+                const elapsed = now - startTime;
+                
+                if (elapsed < duration) {
+                    // Auto-open modal if countdown is still running
+                    paymentModal.show();
+                    startCountdown(startTime);
+                } else {
+                    // Remove expired countdown
+                    localStorage.removeItem('paymentStartTime');
+                }
+            }
         });
     </script>
 </body>
