@@ -1,0 +1,88 @@
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Viewer - Imigrasi</title>
+    <style>
+        /* Menghilangkan margin dan padding default dari body dan html */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Mencegah scroll bar pada halaman utama */
+        }
+
+        /* Membuat iframe memenuhi seluruh layar */
+        iframe {
+            border: none; /* Menghilangkan border default iframe */
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Styling untuk tombol live chat kustom, gaya diinspirasi dari imigrasi.go.id */
+        #custom-chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            height: 60px; /* Menyesuaikan tinggi */
+            cursor: pointer;
+            z-index: 999999;
+            border-radius: 30px; /* Membuat bentuk pil */
+            background-color: #343a40; /* Warna btn-dark bootstrap */
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            /* Padding: atas kanan bawah kiri */
+            padding: 0 5px 0 25px; 
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.2s ease-in-out;
+        }
+
+        #custom-chat-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+        }
+
+        .icon-container {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%; /* Lingkaran sempurna untuk ikon */
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px; /* Memberi jarak dari teks */
+            flex-shrink: 0; /* Mencegah ikon menyusut */
+        }
+
+        .icon-container img {
+            width: 40px; /* Sedikit lebih kecil dari containernya */
+            height: auto;
+        }
+
+        .chat-text {
+            white-space: nowrap; /* Mencegah teks turun baris */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Iframe untuk menampilkan website target -->
+    <iframe src="https://imigrasi.go.id/" title="Website Imigrasi"></iframe>
+
+    <!-- Tombol live chat kustom -->
+    <!-- Saat diklik, tombol ini akan menjalankan fungsi jivo_api.open() untuk membuka chat -->
+    <div id="custom-chat-button" onclick="jivo_api.open()">
+        <span class="chat-text">Tanya Mido Yuk!</span>
+        <div class="icon-container">
+            <img src="https://botmaster-files.s3.ap-southeast-1.amazonaws.com/Content/6a6155f4ccd5b8933bc1a53de8d280720ee5781f/logo%20livechat.png" alt="Live Chat">
+        </div>
+    </div>
+
+    <!-- Script untuk widget JivoSite Live Chat -->
+    <script src="//code.jivosite.com/widget/6mvXgLQfwY" async></script>
+
+</body>
+</html>
